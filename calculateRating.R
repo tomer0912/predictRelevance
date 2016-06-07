@@ -22,6 +22,7 @@ checkTokenPrecent <- function(row){
   return(1 + titleTokenPrecentage(queryWords,titleWords))
 }
 
+#this function checks if the query has more than one word
 queryHasMoreThanOneWord <- function(row){
   if(length(grep(" ", toupper(row$query)))>0){
     return(TRUE)
@@ -31,6 +32,7 @@ queryHasMoreThanOneWord <- function(row){
   }
 }
 
+#this function checks if the character sequence from the query can be found in the title
 checkQuerySequenceInTitle<-function(row){
   if(length(grep(toupper(row$query),toupper(row$product_title)))>0){
     return(TRUE)
@@ -40,12 +42,15 @@ checkQuerySequenceInTitle<-function(row){
   }
 }
 
+#this function transforms each word in the given string to its stem
 stemSentence <- function(x, language){
   x <- strsplit(x, "[[:blank:]]")[[1]]
   x <- wordStem(x, language)
   return(x)
 }
 
+#this function calculates the precentage of significant words 
+#from the query found in the title 
 titleTokenPrecentage <- function(query, title){
   inTitle <- 0
   query <- lapply(query, toupper)
@@ -61,8 +66,9 @@ titleTokenPrecentage <- function(query, title){
   return(precent)
 }
 
+#this function removes from a given string punctuation, numbers and stop words
+#turns each character in the string to lower case letter
 removeStopWords <- function(str){
-  
   myCorpus <- Corpus(VectorSource(str))
   myCorpus <- tm_map(myCorpus, removePunctuation)
   myCorpus <- tm_map(myCorpus, removeNumbers) 
